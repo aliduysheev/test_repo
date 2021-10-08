@@ -88,12 +88,119 @@
 #     if book in list_of_books:
 #         print()
 # registration()
-    
+
+# dew write_csv(data):
+#     with open('mobiles.csv', 'a') as csv_file:
+#         writer = csv.writer(csv_file, delimter= '/')
+#         writer.writerow()
+
+# def main():
+#     # html
+#     # 
+
+# https://cars.kg/offers
+# import requests
+# from bs4 import BeautifulSoup as BS
+
+# import csv
+
+# def get_html(url):
+#     response = requests.get(url)
+#     return response.text
+
+# def get_data(html):
+#     soup = BS(html, 'lxml')
+#     catalog = soup.find('div', class_='catalog-list')
+#     cars = catalog.find_all('a', class_='catalog-list-item')
+#     for car in cars:
+#         try:
+#             title = car.find('span', class_='catalog-item-caption')
+#             # print(price)
+#         except:
+#             title= ''
+#         except:
+#             price= ''
+#         try:
+#             img = car.find('span', class_='catalog-item-price')text.strip()
+# def main():
+#     # url = 'https://cars.kg/offers'
+#     # html = get_html(url)
+#     # data = get_data(html)
+#     for page in range(1,7):
+#         url = f'https://cars.kg/offers/{page}'
+#         html = get_html(url)
+#         data = get_data(html)
+
+# main()
+
+# from typing import ClassVar
+# import schedule    
+# import time
+
+# def job():
+#     print("I'm working...")
+
+# schedule.every(3).seconds.do(job)
+# # schedule.every().thursday.at('19:10').do(job)
+
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
 
 
 
 
 
+import  requests
+from bs4 import BeautifulSoup as BS
+import csv
+
+
+def get_html(url):
+    response = requests.get(url)
+    return response.text
+
+def get_data(html):
+    soup = BS(html, 'lxml')
+    print(soup)
+    phone = soup.find('div', class_='list-view')
+    mobiles = phone.find_all('div', class_='item product_listbox oh')
+    for mobile in mobiles:
+        try: 
+            title = mobile.find('div', class_='listbox_title oh').text.strip()
+            print(title)
+        except:
+            title = ''
+        try:
+            price = mobile.find('div', class_="listbox_price text-center").text.strip()
+        except:
+            price = ''
+        try:
+            image = mobile.find('div', class_='listbox_img pull-left').find('a').find('img').get('src')
+        except:
+            image = ''
+
+        data = {
+            'title':title,
+            'price':price,
+            'image':image
+        }
+        print(data)
+        write_csv(data)
+
+def write_csv(data):
+    with open ('mobiles.csv', 'a') as csv_file:
+        writer = csv.writer(csv_file, delimiter='/')
+        writer.writerow((data['title'],data['price'],data['image']))
+
+def main():
+    for page in range(1, 28):
+        url = f'https://www.kivano.kg/mobilnye-telefony?page={page}'
+        html = get_html(url)
+        data = get_data(html)
+
+
+main()
 
 
 
